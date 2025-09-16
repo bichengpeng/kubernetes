@@ -277,7 +277,8 @@ func (w *worker) doProbe(ctx context.Context) (keepGoing bool) {
 	}
 
 	// Probe disabled for InitialDelaySeconds.
-	if int32(time.Since(c.State.Running.StartedAt.Time).Seconds()) < w.spec.InitialDelaySeconds {
+	secondsSinceStartedAt := int32(time.Since(c.State.Running.StartedAt.Time).Seconds())
+	if secondsSinceStartedAt > 0 && secondsSinceStartedAt < w.spec.InitialDelaySeconds {
 		return true
 	}
 
